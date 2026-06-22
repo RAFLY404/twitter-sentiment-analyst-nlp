@@ -20,10 +20,6 @@ MUTED = RGBColor(0x55, 0x55, 0x55)
 LIGHT_GRAY = "E7E6E6"
 WHITE = "FFFFFF"
 
-# The documents skill requires a resolved preset. This report uses the
-# compact_reference_guide preset as its density baseline, with one named
-# override: IEEE Conference Paper. The override supplies A4 geometry,
-# Times New Roman typography, a single-column title block, and a two-column body.
 TOKENS = {
     "page_width": Cm(21.0),
     "page_height": Cm(29.7),
@@ -266,7 +262,6 @@ def add_data_table(doc, headers, rows, widths, font_size=7.5, numeric_cols=()):
             r = p.add_run(str(value))
             set_font(r, size=font_size)
 
-    # Geometry must be re-applied after all rows have been added.
     set_table_geometry(table, widths, TOKENS["table_indent_dxa"])
     return table
 
@@ -328,7 +323,6 @@ def build_document():
     author_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     author_table.autofit = False
     set_table_geometry(author_table, [3360, 3360, 3360], 0)
-    # Borderless author block, as in an IEEE conference template.
     tbl_pr = author_table._tbl.tblPr
     borders = OxmlElement("w:tblBorders")
     for edge in ("top", "left", "bottom", "right", "insideH", "insideV"):
@@ -609,7 +603,6 @@ def build_document():
     )
 
     add_ieee_heading(doc, "", "References")
-    # Remove the leading dot added by the generic heading function.
     ref_heading = doc.paragraphs[-1]
     ref_heading.runs[0].text = "REFERENCES"
 
@@ -630,7 +623,6 @@ def build_document():
     for index, reference in enumerate(references, start=1):
         add_reference(doc, index, reference)
 
-    # Explicitly keep headers and footers empty, matching IEEE manuscript style.
     for section in doc.sections:
         for p in section.header.paragraphs + section.footer.paragraphs:
             p.clear()
